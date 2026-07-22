@@ -49,3 +49,12 @@ lossToSmallWinChance: 0.52
 Aumentandolo verso `0.65` si vince ancora più spesso; riducendolo verso `0.30` il gioco diventa meno generoso.
 Le vincite aggiuntive sono prevalentemente piccole e usano simboli bassi o medi.
 Il gioco utilizza esclusivamente crediti virtuali.
+
+## Versione v5 — Debugging e borsellino demo
+
+- Pulsante **DEBUG** con modal "Debugging mode".
+- Regolazione in tempo reale della frequenza delle piccole vincite, delle combinazioni Bonus, dei quattro simboli e del limite dei premi assistiti.
+- Proiezione indicativa su 1.000 giocate e log del calcolo RNG dell'ultimo spin.
+- Tre minigiochi Bonus alternati: Tesori dell'Impero, Ruota della Fortuna e Scelta Imperiale.
+- Pulsanti **RISCUOTI** e **RICARICA** con voucher alfanumerico locale di 5 caratteri.
+- I voucher e tutti i crediti sono esclusivamente virtuali, senza valore monetario, e vengono salvati nel browser tramite localStorage.
