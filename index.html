@@ -1,12 +1,98 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>LOT EMPIRE — Complete v2</title><link rel="stylesheet" href="style.css"></head><body>
-<div id="loading"><img src="assets/loading-bars.png" alt="Caricamento"><div class="loadtrack"><i></i></div><b>PREPARA IL TUO DESTINO...</b></div>
-<main id="app">
-<header><div class="mascot"><img src="assets/reference-original.jpeg" alt="Litterio"></div><div class="brand"><small>LOT GAMING PRESENTA</small><h1>LOT EMPIRE</h1><span>DELLA FORTUNA</span></div><div class="jackpots"><div class="mini">MINI <b>100,00</b></div><div class="minor">MINOR <b>500,00</b></div><div class="major">MAJOR <b>5.000,00</b></div><div class="grand">GRAND <b>50.000,00</b></div></div></header>
-<section class="stage">
-<aside class="power"><h2>POTERE DELL'IMPERO</h2><div class="meter"><i id="powerFill"></i></div><b id="powerText">0 / 20</b><button id="galleryBtn">GRAFICA</button><button id="rulesBtn">REGOLE</button></aside>
-<div class="machine"><div id="reels" class="reels"></div><svg id="paylines" viewBox="0 0 1000 600" preserveAspectRatio="none"></svg><div id="message">Litterio guida il tuo destino!</div></div>
-<aside class="right"><img src="assets/wild-gold.png" alt="Wild dorato"><div>25 LINEE</div><div id="freeText">GIRI GRATIS 0</div><button id="soundBtn">AUDIO ON</button></aside>
-</section>
-<footer><div class="display"><small>CREDITO</small><b id="credit">1.000,00</b></div><button id="betDown">−</button><div class="display"><small>PUNTATA</small><b id="bet">1,00</b></div><button id="betUp">+</button><button id="maxBtn">MAX BET</button><button id="spinBtn" class="spin">↻</button><button id="autoBtn">AUTO</button><div class="display"><small>VINCITA</small><b id="win">0,00</b></div></footer>
-<div class="stats"><span id="stats">Giocate: 0 · RTP: 0,00%</span><span>Crediti virtuali · Demo tecnica</span></div>
-</main><div id="overlay" class="hidden"><div id="card"></div></div><script src="game.js"></script></body></html>
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#12051c">
+  <title>LOT EMPIRE — Render Mobile v3</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="loading" aria-live="polite">
+    <img src="assets/loading-bars.png" alt="Caricamento LOT Empire">
+    <div class="loadtrack"><i></i></div>
+    <b>PREPARA IL TUO DESTINO...</b>
+  </div>
+
+  <main id="app">
+    <header class="hero">
+      <div class="mascot"><img src="assets/reference-original.jpeg" alt="Litterio"></div>
+      <div class="brand">
+        <small>LOT GAMING PRESENTA</small>
+        <h1>LOT EMPIRE</h1>
+        <span>DELLA FORTUNA</span>
+      </div>
+      <div class="jackpots" aria-label="Jackpot">
+        <div class="mini">MINI <b>100,00</b></div>
+        <div class="minor">MINOR <b>500,00</b></div>
+        <div class="major">MAJOR <b>5.000,00</b></div>
+        <div class="grand">GRAND <b>50.000,00</b></div>
+      </div>
+    </header>
+
+    <section class="stage">
+      <aside class="power">
+        <h2>POTERE DELL'IMPERO</h2>
+        <div class="meter" aria-label="Potere dell'Impero"><i id="powerFill"></i></div>
+        <b id="powerText">0 / 20</b>
+        <button type="button" id="galleryBtn">GRAFICA</button>
+        <button type="button" id="rulesBtn">REGOLE</button>
+      </aside>
+
+      <div class="machine">
+        <div id="reels" class="reels" aria-label="Rulli di gioco"></div>
+        <svg id="paylines" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <div id="message" aria-live="polite">Litterio guida il tuo destino!</div>
+      </div>
+
+      <aside class="right">
+        <img src="assets/wild-gold.png" alt="Wild dorato">
+        <div>25 LINEE</div>
+        <div id="freeText">GIRI GRATIS 0</div>
+        <button type="button" id="soundBtn">AUDIO ON</button>
+      </aside>
+    </section>
+
+    <footer class="controls">
+      <div class="display"><small>CREDITO</small><b id="credit">1.000,00</b></div>
+      <button type="button" id="betDown" aria-label="Diminuisci puntata">−</button>
+      <div class="display"><small>PUNTATA</small><b id="bet">1,00</b></div>
+      <button type="button" id="betUp" aria-label="Aumenta puntata">+</button>
+      <button type="button" id="maxBtn">MAX BET</button>
+      <button type="button" id="spinBtn" class="spin" aria-label="Gira i rulli">↻</button>
+      <button type="button" id="autoBtn">AUTO</button>
+      <div class="display"><small>VINCITA</small><b id="win">0,00</b></div>
+    </footer>
+
+    <section class="lower-deck" aria-label="Console imperiale">
+      <div class="imperial-card mascot-card">
+        <img src="assets/bonus.png" alt="Litterio Bonus">
+        <div><small>GUIDA IMPERIALE</small><strong>Litterio veglia sulla tua fortuna</strong><p>Raccogli potere, attiva bonus e conquista i tesori dell'Impero.</p></div>
+      </div>
+      <div class="imperial-card session-card">
+        <small>SESSIONE</small>
+        <strong id="mobileStats">0 giocate</strong>
+        <div class="mini-grid"><span>RTP <b id="mobileRtp">0,00%</b></span><span>Giri gratis <b id="mobileFree">0</b></span></div>
+      </div>
+      <div class="imperial-card help-card">
+        <small>COME SI GIOCA</small>
+        <div class="feature-row"><span>♛</span><p><b>WILD</b> sostituisce i simboli normali.</p></div>
+        <div class="feature-row"><span>🏛</span><p><b>3 SCATTER</b> attivano i giri gratis.</p></div>
+        <div class="feature-row"><span>🎁</span><p><b>3 BONUS</b> aprono il mini gioco.</p></div>
+      </div>
+      <div class="imperial-card art-card">
+        <small>ARTE DELL'IMPERO</small>
+        <div class="art-strip"><img src="assets/scatter.png" alt="Scatter"><img src="assets/wild-gold.png" alt="Wild"><img src="assets/bonus.png" alt="Bonus"></div>
+      </div>
+    </section>
+
+    <div class="stats">
+      <span id="stats">Giocate: 0 · RTP: 0,00%</span>
+      <span>Crediti virtuali · Demo tecnica</span>
+    </div>
+  </main>
+
+  <div id="overlay" class="hidden"><div id="card"></div></div>
+  <script src="game.js"></script>
+</body>
+</html>
