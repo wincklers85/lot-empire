@@ -36,3 +36,16 @@ La pagina è ottimizzata per portrait:
 - supporto all'area sicura inferiore degli iPhone.
 
 Crediti esclusivamente virtuali. Demo tecnica.
+
+## Profilo vincite frequenti
+
+Questa versione carica `math-config.js` prima di `game.js`.
+Il parametro principale è:
+
+```js
+lossToSmallWinChance: 0.52
+```
+
+Aumentandolo verso `0.65` si vince ancora più spesso; riducendolo verso `0.30` il gioco diventa meno generoso.
+Le vincite aggiuntive sono prevalentemente piccole e usano simboli bassi o medi.
+Il gioco utilizza esclusivamente crediti virtuali.
