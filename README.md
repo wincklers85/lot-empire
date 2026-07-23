@@ -58,3 +58,21 @@ Il gioco utilizza esclusivamente crediti virtuali.
 - Tre minigiochi Bonus alternati: Tesori dell'Impero, Ruota della Fortuna e Scelta Imperiale.
 - Pulsanti **RISCUOTI** e **RICARICA** con voucher alfanumerico locale di 5 caratteri.
 - I voucher e tutti i crediti sono esclusivamente virtuali, senza valore monetario, e vengono salvati nel browser tramite localStorage.
+
+
+## Versione v6
+- Pulsanti DEBUG, RISCUOTI e RICARICA sempre visibili in alto, anche su smartphone.
+- Modal corretti con gestori eventi locali.
+- Voucher compatti: importo in centesimi convertito in base 36 + 2 caratteri di controllo.
+- Decodifica del valore visualizzata prima della ricarica.
+- Compatibilità localStorage con fallback in memoria.
+
+
+## Versione v7 Responsive VLT Demo
+- credito iniziale 0
+- avvio con €999 demo o codice voucher
+- layout rulli 5×3 adattivo in verticale
+- desktop a pagina intera
+- quattro minigiochi alternati, incluso Litterio Empire
+- animazione Wild dalla sprite sheet esistente
+- tutti i crediti sono virtuali e senza valore monetario

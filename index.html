@@ -4,17 +4,39 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#12051c">
-  <title>LOT EMPIRE — Debug & Bonus v5</title>
+  <title>LOT EMPIRE — Responsive VLT Demo v7</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div id="loading" aria-live="polite">
     <img src="assets/loading-bars.png" alt="Caricamento LOT Empire">
     <div class="loadtrack"><i></i></div>
-    <b>PREPARA IL TUO DESTINO...</b>
+    <b id="loadingText">CARICAMENTO SISTEMA 0%</b>
   </div>
 
-  <main id="app">
+
+  <section id="creditGate" class="credit-gate hidden" aria-label="Avvio credito demo">
+    <div class="gate-panel">
+      <img src="assets/bonus.png" alt="Litterio Empire">
+      <small>LOT GAMING · VLT DEMO</small>
+      <h1>LOT EMPIRE</h1>
+      <div class="gate-credit"><span>CREDITO</span><b>€ <i id="gateCredit">0,00</i></b></div>
+      <p>Questa versione utilizza esclusivamente crediti virtuali dimostrativi, senza valore monetario.</p>
+      <div class="gate-actions">
+        <button type="button" id="addDemoCredit">AGGIUNGI CREDITO DEMO €999</button>
+        <button type="button" id="gateRecharge">RICARICA CON CODICE</button>
+      </div>
+      <div class="gate-status" id="gateStatus">Inserisci credito demo per iniziare.</div>
+    </div>
+  </section>
+
+  <main id="app" class="locked">
+    <nav class="quick-actions" aria-label="Azioni rapide">
+      <button type="button" id="debugTopBtn" class="debug-button">⚙ DEBUG</button>
+      <button type="button" id="cashoutTopBtn">⇩ RISCUOTI</button>
+      <button type="button" id="rechargeTopBtn">⇧ RICARICA</button>
+    </nav>
+
     <header class="hero">
       <div class="mascot"><img src="assets/reference-original.jpeg" alt="Litterio"></div>
       <div class="brand">
@@ -81,12 +103,12 @@
         <small>COME SI GIOCA</small>
         <div class="feature-row"><span>♛</span><p><b>WILD</b> sostituisce i simboli normali.</p></div>
         <div class="feature-row"><span>🏛</span><p><b>3 SCATTER</b> attivano i giri gratis.</p></div>
-        <div class="feature-row"><span>🎁</span><p><b>3 BONUS</b> aprono il mini gioco.</p></div>
+        <div class="feature-row"><span>🎁</span><p><b>3 BONUS</b> alternano quattro minigiochi.</p></div>
       </div>
       <div class="imperial-card wallet-card">
         <small>BORSELLINO DEMO</small>
         <strong id="walletStatus">Nessun voucher emesso</strong>
-        <p>I codici sono voucher virtuali locali, senza valore monetario.</p>
+        <p>Il valore viene codificato in base alfanumerica compatta e protetto da una firma locale.</p>
       </div>
       <div class="imperial-card art-card">
         <small>ARTE DELL'IMPERO</small>
@@ -96,7 +118,7 @@
 
     <div class="stats">
       <span id="stats">Giocate: 0 · RTP: 0,00%</span>
-      <span>Crediti virtuali · Demo tecnica</span>
+      <span>Crediti virtuali · Esperienza VLT dimostrativa</span>
     </div>
   </main>
 
