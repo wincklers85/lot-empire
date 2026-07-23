@@ -4,10 +4,173 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#12051c">
-  <title>LOT EMPIRE — Responsive VLT Demo v7</title>
-  <link rel="stylesheet" href="style.css">
+  <title>LOT EMPIRE — Responsive VLT Demo v8 FIXED</title>
+  <style>
+:root{
+  --gold:#ffd363;
+  --gold-dark:#9a6115;
+  --purple:#4f0a70;
+  --dark:#07040b;
+  --panel:rgba(8,4,12,.9);
+  --safe-bottom:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#050307;color:#fff;font-family:Georgia,"Times New Roman",serif}
+body{background:url('assets/background-main.png') center top/cover fixed;overflow-x:hidden}
+button{font:inherit;color:#fff;background:linear-gradient(#6d2387,#280532);border:2px solid #d49b31;border-radius:10px;padding:10px;cursor:pointer;touch-action:manipulation}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.55}
+img{max-width:100%;display:block}
+
+#loading{position:fixed;inset:0;z-index:99;background:#050307;display:grid;place-items:center;align-content:center;gap:15px;transition:.6s;padding:16px}
+#loading img{width:min(920px,92vw);border:3px solid #ad7418;border-radius:18px}
+.loadtrack{width:min(650px,80vw);height:20px;border:2px solid gold;border-radius:20px;overflow:hidden}
+.loadtrack i{display:block;height:100%;width:0;background:linear-gradient(90deg,#531084,#ef4fff,#ffd55c);animation:load 2.1s forwards}
+
+#app{width:min(1536px,100%);margin:auto;padding:10px;background:rgba(2,1,4,.58);min-height:100vh}
+.hero,.stage,.controls,.stats,.lower-deck{border:2px solid var(--gold-dark);background:var(--panel);border-radius:18px;box-shadow:inset 0 0 22px #000}
+.hero{display:grid;grid-template-columns:180px 1fr 520px;align-items:center;padding:8px 18px;background-image:linear-gradient(90deg,rgba(0,0,0,.8),rgba(25,5,35,.25)),url('assets/background-night.png');background-size:cover;background-position:center}
+.mascot img{width:140px;height:140px;border-radius:50%;object-fit:cover;border:5px solid gold}
+.brand{text-align:center}.brand small{letter-spacing:.14em;color:#f1d18d}.brand h1{font-size:clamp(42px,6vw,92px);margin:0;color:var(--gold);text-shadow:0 4px #6e3500,0 0 20px #ffd45b}.brand span{display:inline-block;background:#4d0a64;padding:5px 30px;border:2px solid gold;border-radius:6px}
+.jackpots{display:grid;grid-template-columns:1fr 1fr;gap:8px}.jackpots div{text-align:center;padding:9px;border:2px solid gold;border-radius:9px;font-size:18px}.jackpots b{display:block;font-size:24px}.mini{background:#064c24}.minor{background:#073b70}.major{background:#59107a}.grand{background:#7a100d}
+
+.stage{display:grid;grid-template-columns:170px minmax(0,1fr) 150px;gap:6px;min-height:650px;padding:10px;margin-top:8px;background-image:url('assets/frame-empty.png');background-size:cover;background-position:center}
+.power,.right{background:rgba(4,2,8,.84);border:2px solid #8d5915;border-radius:12px;padding:10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}.power h2{font-size:18px;color:var(--gold)}
+.meter{height:410px;width:42px;border:3px solid gold;background:#120818;border-radius:22px;display:flex;align-items:flex-end;overflow:hidden}.meter i{display:block;width:100%;height:0;background:linear-gradient(#fff270,#ef36ff,#67008b);box-shadow:0 0 18px #ef44ff;transition:.6s}
+.right img{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid gold}.right div{width:100%;padding:10px;border:1px solid #a96f18;background:#170a1d}
+.machine{position:relative;min-width:0;padding:10px 5px 42px}
+.reels{height:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;background:#02050a;border:6px ridge #d99b2d;border-radius:15px;overflow:hidden}
+.reel{display:grid;grid-template-rows:repeat(3,1fr);gap:4px;padding:3px;border-left:2px solid gold;border-right:2px solid #6c3b02;background:#071321;min-width:0}
+.symbol{position:relative;overflow:hidden;border:1px solid #b77b20;border-radius:8px;background:radial-gradient(circle,#12304b,#02070d);display:grid;place-items:center;min-height:0}.symbol img{width:100%;height:100%;object-fit:cover;transition:.25s}.symbol.spinning img{filter:blur(8px) brightness(1.4);transform:scaleY(1.25)}.symbol.win{animation:pulse .55s infinite alternate;box-shadow:inset 0 0 35px gold,0 0 24px gold}.symbol.special img{object-fit:cover}
+.machine svg{position:absolute;inset:10px 5px 42px;width:calc(100% - 10px);height:calc(100% - 52px);pointer-events:none}.machine polyline{fill:none;stroke:#ffe34c;stroke-width:8;stroke-dasharray:20 10;filter:drop-shadow(0 0 6px orange);animation:dash 1s linear infinite}
+#message{position:absolute;bottom:7px;left:12%;right:12%;text-align:center;background:#120817;border:2px solid gold;border-radius:10px;padding:7px;color:#ffeaa6;font-weight:bold}
+
+.controls{margin-top:8px;display:grid;grid-template-columns:1.2fr auto 1fr auto auto 130px auto 1.2fr;gap:8px;align-items:center;padding:10px}.display{text-align:center;border:2px solid #9b6217;background:#050507;border-radius:10px;padding:7px}.display small{display:block;color:#d5b46e}.display b{font-size:clamp(20px,3vw,34px);color:#fff0ad}.spin{font-size:56px;border-radius:50%;width:110px;height:110px;background:radial-gradient(circle,#7c2da0,#30043b);box-shadow:0 0 20px #ffc13c}
+
+.lower-deck{margin-top:8px;padding:12px;display:grid;grid-template-columns:1.3fr .8fr 1fr .8fr;gap:10px;background-image:linear-gradient(rgba(6,2,10,.86),rgba(6,2,10,.92)),url('assets/background-night.png');background-size:cover;background-position:center}
+.imperial-card{border:2px solid #9b6217;border-radius:14px;background:rgba(8,4,12,.86);padding:12px;min-width:0}.imperial-card small{color:#d8b56f;letter-spacing:.08em}.imperial-card strong{display:block;color:#ffe7a3;font-size:20px;margin-top:3px}.imperial-card p{margin:5px 0;color:#e8d9b8}.mascot-card{display:grid;grid-template-columns:100px 1fr;gap:12px;align-items:center}.mascot-card img{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid gold}.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.mini-grid span{border:1px solid #956218;border-radius:8px;padding:7px;text-align:center}.mini-grid b{display:block;color:#fff2a8}.feature-row{display:flex;gap:9px;align-items:center}.feature-row span{font-size:25px}.feature-row p{font-size:14px}.art-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}.art-strip img{aspect-ratio:1/1;object-fit:cover;border:1px solid gold;border-radius:8px}
+.stats{margin-top:7px;padding:7px 15px;display:flex;justify-content:space-between;color:#d6c38f}
+
+#overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.88);display:grid;place-items:center;padding:15px}#overlay.hidden{display:none}#card{width:min(1200px,96vw);max-height:94vh;overflow:auto;border:4px solid gold;border-radius:18px;background:#110718;padding:18px;text-align:center;box-shadow:0 0 50px #c03bff}#card.visual{background-size:cover;background-position:center;min-height:min(760px,90vh);display:flex;flex-direction:column;justify-content:flex-end}.popup-panel{background:rgba(5,2,8,.82);border:2px solid gold;border-radius:15px;padding:16px}.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.gallery img{width:100%;border:2px solid #a86c1a;border-radius:10px}.chests{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.chest{min-height:120px;font-size:55px}.bonusLogo{font-size:clamp(48px,10vw,150px);color:gold;text-shadow:0 0 30px #f3a;animation:logoBreak 2.2s forwards}.litterioBonus{font-size:clamp(28px,5vw,70px);animation:litterio 2.2s forwards}.close{position:sticky;top:0;float:right;font-size:24px}.bigAmount{font-size:clamp(45px,9vw,120px);color:#fff0a2;text-shadow:0 0 25px gold}
+
+@keyframes load{to{width:100%}}@keyframes pulse{to{filter:brightness(1.7);transform:scale(.96)}}@keyframes dash{to{stroke-dashoffset:-60}}@keyframes logoBreak{0%{transform:scale(.2);opacity:0}45%{transform:scale(1.15);opacity:1}70%{transform:scale(2)}100%{transform:scale(3) rotate(7deg);opacity:0}}@keyframes litterio{0%,55%{opacity:0;transform:scale(.2)}80%{opacity:1;transform:scale(1.2)}100%{opacity:1;transform:scale(1)}}
+
+@media(max-width:900px){
+  body{background-attachment:scroll;background-position:center top}
+  #app{padding:4px 4px calc(8px + var(--safe-bottom));min-height:100dvh}
+  .hero{grid-template-columns:58px minmax(0,1fr);padding:5px 7px;border-radius:10px;min-height:88px}
+  .mascot img{width:52px;height:52px;border-width:2px}
+  .brand small{font-size:8px}.brand h1{font-size:clamp(25px,9vw,42px);line-height:.95}.brand span{font-size:10px;padding:2px 15px}
+  .jackpots{grid-column:1/-1;grid-template-columns:repeat(4,1fr);gap:3px;margin-top:4px}.jackpots div{padding:3px 2px;font-size:9px;border-width:1px}.jackpots b{font-size:11px}
+
+  .stage{grid-template-columns:42px minmax(0,1fr);gap:2px;min-height:0;height:min(49dvh,520px);padding:3px;margin-top:4px;border-radius:10px;background-size:cover}
+  .right{display:none}
+  .power{padding:3px;gap:4px;border-radius:7px}.power h2{font-size:7px;writing-mode:vertical-rl;transform:rotate(180deg);margin:0;max-height:92px}.power button{font-size:0;padding:5px;width:31px;height:31px}.power button::before{font-size:14px}.power #galleryBtn::before{content:'▦'}.power #rulesBtn::before{content:'?'}
+  .meter{height:130px;width:18px;border-width:2px}.power b{font-size:8px}
+  .machine{padding:2px 1px 27px}.reels{border-width:3px;border-radius:8px;gap:1px}.reel{gap:1px;padding:1px;border-width:1px}.symbol{border-radius:3px;border-width:1px}.symbol img{object-fit:cover}
+  .machine svg{inset:2px 1px 27px;width:calc(100% - 2px);height:calc(100% - 29px)}.machine polyline{stroke-width:5}
+  #message{bottom:2px;left:3%;right:3%;padding:3px;font-size:10px;border-width:1px}
+
+  .controls{position:relative;margin-top:4px;border-radius:10px;padding:5px;grid-template-columns:1fr 34px 1fr 34px 54px 72px 54px 1fr;gap:3px;min-height:82px}
+  .display{padding:3px;border-width:1px;border-radius:6px}.display small{font-size:7px}.display b{font-size:12px;white-space:nowrap}
+  .controls button{padding:3px;font-size:9px;border-width:1px;border-radius:7px;min-height:38px}.spin{font-size:38px!important;width:66px;height:66px;min-height:66px!important;border-radius:50%!important;padding:0!important}
+
+  .lower-deck{margin-top:4px;padding:6px;grid-template-columns:1fr 1fr;gap:5px;border-radius:10px;min-height:calc(100dvh - min(49dvh,520px) - 188px)}
+  .imperial-card{padding:7px;border-radius:8px;border-width:1px}.imperial-card small{font-size:8px}.imperial-card strong{font-size:12px}.imperial-card p{font-size:10px;line-height:1.2}.mascot-card{grid-column:1/-1;grid-template-columns:55px 1fr;gap:7px}.mascot-card img{width:55px;height:55px;border-width:2px}.mini-grid{gap:3px;margin-top:4px}.mini-grid span{font-size:8px;padding:4px}.feature-row{gap:4px}.feature-row span{font-size:14px}.feature-row p{font-size:9px}.art-strip{gap:3px;margin-top:4px}.stats{font-size:9px;padding:4px 7px;border-radius:8px;gap:6px;flex-wrap:wrap}
+  #card{padding:8px}.chests{grid-template-columns:repeat(2,1fr)}.chest{min-height:82px;font-size:38px}
+}
+
+@media(max-width:430px){
+  .controls{grid-template-columns:1fr 29px 1fr 29px 45px 64px 45px 1fr}.controls button{font-size:8px}.spin{width:58px;height:58px;min-height:58px!important;font-size:34px!important}
+  .lower-deck{grid-template-columns:1fr 1fr}.session-card,.art-card{min-height:108px}.help-card{grid-column:1/-1}.feature-row{display:inline-flex;width:32%;vertical-align:top;align-items:flex-start}.feature-row p{margin:0}
+}
+
+/* v5 Debugging, voucher demo e minigiochi */
+.debug-button{background:linear-gradient(#a93b28,#4a0b08)}
+.controls{grid-template-columns:1.15fr auto .9fr auto auto 112px auto auto auto 1.15fr}
+.wallet-card{grid-column:auto}
+.debug-panel,.wallet-panel,.bonus-panel{width:min(760px,94vw);max-height:90vh;overflow:auto;background:rgba(8,4,12,.96);border:3px solid #d49b31;border-radius:18px;padding:18px;box-shadow:0 0 45px #000}
+.debug-panel h1,.wallet-panel h1,.bonus-panel h1{margin:0 0 12px;color:#ffd363;text-align:center}
+.debug-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.debug-control{border:1px solid #8d5915;border-radius:12px;padding:12px;background:#100816}.debug-control label{display:flex;justify-content:space-between;color:#ffe7a3;margin-bottom:8px}.debug-control input[type=range]{width:100%;accent-color:#d750ff}.debug-control select,.wallet-panel input{width:100%;padding:12px;border-radius:9px;border:2px solid #b47b24;background:#09060d;color:white;font-size:18px}.debug-math{margin-top:14px;padding:12px;border:2px solid #633279;border-radius:12px;background:#07040b;line-height:1.55}.debug-math code{color:#ffd363}.debug-live{margin-top:10px;padding:10px;background:#1a0a22;border-left:4px solid #ef4fff;white-space:pre-wrap;font-family:ui-monospace,monospace;font-size:13px}.modal-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}.voucher-code{font:700 42px ui-monospace,monospace;letter-spacing:.18em;text-align:center;color:#ffe06e;padding:18px;border:3px dashed #d49b31;border-radius:12px;background:#08050a;margin:15px 0}.bonus-options{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.bonus-choice{min-height:130px;font-size:42px}.wheel{width:250px;height:250px;margin:15px auto;border:10px solid gold;border-radius:50%;background:conic-gradient(#541073 0 45deg,#073b70 45deg 90deg,#7a100d 90deg 135deg,#064c24 135deg 180deg,#541073 180deg 225deg,#073b70 225deg 270deg,#7a100d 270deg 315deg,#064c24 315deg);display:grid;place-items:center;font-size:36px;font-weight:bold;transition:transform 2.2s cubic-bezier(.12,.72,.1,1)}
+.shield-grid,.chests{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.shield,.chest{min-height:100px;font-size:40px}.bonus-result{text-align:center;font-size:34px;color:#ffe06e;margin:12px}
+@media(max-width:800px){.controls{grid-template-columns:repeat(5,1fr)}.controls .display{grid-column:span 2}.spin{grid-column:span 1}.debug-grid{grid-template-columns:1fr}.bonus-options{grid-template-columns:1fr 1fr}.lower-deck{grid-template-columns:1fr}.wallet-card{grid-column:auto}.debug-panel,.wallet-panel,.bonus-panel{padding:12px}.voucher-code{font-size:30px}.wheel{width:210px;height:210px}}
+
+
+/* v6: azioni sempre visibili e layout mobile corretto */
+.quick-actions{position:sticky;top:0;z-index:45;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:8px;margin-bottom:8px;border:2px solid var(--gold-dark);border-radius:14px;background:rgba(5,2,8,.96);backdrop-filter:blur(8px)}
+.quick-actions button{min-height:46px;font-weight:bold;white-space:nowrap}
+.debug-button{background:linear-gradient(#9a3fc1,#32033f)!important;box-shadow:0 0 12px rgba(226,86,255,.45)}
+#overlay{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:12px;overflow:auto}
+#overlay.hidden{display:none!important}
+#card{width:min(940px,100%);max-height:calc(100dvh - 24px);overflow:auto;background:#0c0710;border:3px solid #c88a29;border-radius:18px;padding:20px;box-shadow:0 0 40px #000}
+.wallet-panel h1,.debug-panel h1{margin-top:0;color:#ffd363;text-align:center}
+.wallet-panel .amount-preview{margin:12px 0;padding:12px;border:1px solid #9b6217;border-radius:10px;background:#08050b;color:#ffe6a1;text-align:center}
+.compact-code{font:700 clamp(28px,8vw,54px) ui-monospace,monospace;letter-spacing:.08em;text-align:center;color:#ffe06e;padding:18px 8px;border:3px dashed #d49b31;border-radius:12px;background:#08050a;margin:15px 0;overflow-wrap:anywhere}
+.code-breakdown{font-family:ui-monospace,monospace;background:#050307;border-left:4px solid #d49b31;padding:10px;margin-top:10px;line-height:1.55}
+.controls{grid-template-columns:repeat(10,minmax(0,1fr))}
+.controls .display{min-width:0}.controls button{min-width:0}
+@media(max-width:800px){
+  #app{padding:4px}
+  .quick-actions{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:5px}
+  .quick-actions button{font-size:12px;padding:8px 3px;min-height:42px}
+  .hero{grid-template-columns:64px 1fr;min-height:auto;padding:5px}.hero .jackpots{grid-column:1/-1;grid-template-columns:repeat(4,1fr)}.hero .jackpots div{font-size:10px;padding:4px}.hero .jackpots b{font-size:12px}.mascot img{width:58px;height:58px;border-width:2px}.brand h1{font-size:31px}.brand small{font-size:8px}.brand span{font-size:10px;padding:3px 12px}
+  .stage{grid-template-columns:1fr;min-height:auto;padding:4px;background-position:center top}.power,.right{display:none}.machine{padding:3px 2px 35px}.reels{height:min(52vh,470px);border-width:3px}.symbol{border-radius:4px}.machine svg{inset:3px 2px 35px;width:calc(100% - 4px);height:calc(100% - 38px)}#message{font-size:11px;left:3%;right:3%;padding:5px}
+  .controls{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;padding:5px}.controls button{padding:7px 2px;font-size:11px;min-height:42px}.controls .display{padding:4px}.controls .display small{font-size:8px}.controls .display b{font-size:14px}.spin{width:58px;height:58px;font-size:33px;justify-self:center}.controls #cashoutBtn,.controls #rechargeBtn{display:none}
+  .lower-deck{grid-template-columns:1fr 1fr;padding:6px;gap:6px}.imperial-card{padding:7px}.mascot-card,.help-card,.art-card{display:none}.wallet-card{grid-column:1/-1}
+  #card{padding:12px;max-height:calc(100dvh - 12px)}
+}
+@media(max-width:390px){.quick-actions button{font-size:10px}.controls{grid-template-columns:repeat(4,minmax(0,1fr))}.controls .spin{grid-column:span 1}.lower-deck{grid-template-columns:1fr}}
+
+
+/* v7 — layout realmente adattivo, avvio a credito zero e animazione Wild */
+#app.locked{filter:blur(4px) brightness(.35);pointer-events:none;user-select:none}
+.credit-gate{position:fixed;inset:0;z-index:110;display:grid;place-items:center;padding:16px;background:radial-gradient(circle at 50% 20%,rgba(91,17,116,.58),rgba(2,1,4,.97) 62%),url('assets/background-night.png') center/cover}
+.credit-gate.hidden{display:none}
+.gate-panel{width:min(620px,96vw);text-align:center;border:4px ridge #e0a43c;border-radius:22px;padding:clamp(14px,3vw,28px);background:rgba(7,3,12,.94);box-shadow:0 0 55px #000,inset 0 0 32px #421052}
+.gate-panel>img{width:clamp(92px,24vw,170px);height:clamp(92px,24vw,170px);object-fit:cover;border-radius:50%;margin:0 auto 8px;border:4px solid gold}
+.gate-panel small{letter-spacing:.18em;color:#f2cc80}.gate-panel h1{font-size:clamp(38px,10vw,74px);margin:4px 0;color:#ffd363;text-shadow:0 3px #6f3600,0 0 20px #ffe25f}
+.gate-credit{margin:15px auto;padding:12px;border:3px solid #ad7418;border-radius:13px;background:#020305;max-width:420px}.gate-credit span{display:block;font-size:13px;color:#e7bf72}.gate-credit b{font-family:ui-monospace,monospace;font-size:clamp(34px,9vw,62px);color:#fff0a0}.gate-credit i{font-style:normal}
+.gate-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.gate-actions button{min-height:58px;font-weight:bold;font-size:16px}.gate-status{margin-top:12px;color:#f3d99b;min-height:24px}
+#loading .loadtrack i{animation:none;transition:width .18s linear}
+
+.wild-sprite{position:absolute;inset:0;background-image:url('assets/wild-animation.png');background-repeat:no-repeat;background-size:400% 300%;z-index:3;filter:drop-shadow(0 0 8px #ffd968)}
+.symbol{isolation:isolate}.symbol img{object-fit:contain;padding:2px}.symbol.special img{object-fit:contain}
+.litterio-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.litterio-box{position:relative;aspect-ratio:1;min-height:78px;overflow:hidden;font-size:32px;background:linear-gradient(145deg,#681285,#20042c);border:3px solid #daa33e}.litterio-box.revealed{background:#08050b}.litterio-box img{width:100%;height:100%;object-fit:cover;border-radius:8px}.litterio-box .reveal-value{font-size:clamp(18px,5vw,34px);color:#ffe27a;font-weight:bold}.litterio-counter{text-align:center;color:#ffe09b;font-size:18px;margin:8px}
+
+@media(min-width:901px){
+  html,body{height:100%}body{overflow:hidden}
+  #app{height:100dvh;max-width:none;width:100%;padding:8px;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto auto;gap:6px}
+  .quick-actions{margin:0}.hero{min-height:112px}.stage{margin:0;height:auto;min-height:0}.machine{min-height:0}.reels{height:100%;width:100%}.controls{margin:0}.lower-deck{display:none}.stats{margin:0}
+}
+
+@media(max-width:900px) and (orientation:portrait){
+  body{min-height:100dvh}
+  #app{width:100%;min-height:100dvh;padding:3px 3px calc(5px + var(--safe-bottom));display:block}
+  .quick-actions{position:relative;margin-bottom:3px}.hero{margin:0}
+  .stage{display:block;height:auto;min-height:0;padding:3px;margin-top:3px;background-position:center}
+  .machine{width:100%;height:auto;padding:2px 1px 28px}
+  .reels{width:100%;height:auto;aspect-ratio:5/3;max-height:none;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px}
+  .reel{min-width:0;height:100%;grid-template-rows:repeat(3,minmax(0,1fr))}
+  .symbol{min-width:0;min-height:0}.symbol img{width:100%;height:100%;object-fit:contain;padding:0}
+  .machine svg{inset:2px 1px 28px;height:calc(100% - 30px)}
+  .controls{margin-top:3px;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;padding:4px}
+  .controls .display{grid-column:span 1}.controls .spin{grid-column:span 1}
+  .lower-deck{min-height:0;margin-top:3px;grid-template-columns:1fr 1fr}.session-card,.wallet-card{min-height:auto}
+}
+@media(max-width:480px) and (orientation:portrait){
+  .quick-actions button{font-size:9px;min-height:36px;padding:4px 2px}.brand h1{font-size:27px}.hero .jackpots div{font-size:8px}.hero .jackpots b{font-size:10px}
+  .controls button{font-size:9px;min-height:36px}.controls .display b{font-size:11px}.spin{width:52px!important;height:52px!important;min-height:52px!important;font-size:30px!important}
+  .lower-deck{grid-template-columns:1fr}.wallet-card{grid-column:auto}.litterio-grid{grid-template-columns:repeat(3,1fr)}
+  .gate-actions{grid-template-columns:1fr}
+}
+@media(orientation:landscape) and (max-height:600px){.lower-deck{display:none}.hero{display:none}.stage{height:calc(100dvh - 150px)}.quick-actions{position:relative}.controls{margin-top:3px}}
+
+.hidden{display:none!important}
+body.startup-locked{overflow:hidden!important;height:100dvh}
+body.startup-locked #app{height:100dvh;overflow:hidden}
+</style>
 </head>
-<body>
+<body class="startup-locked">
   <div id="loading" aria-live="polite">
     <img src="assets/loading-bars.png" alt="Caricamento LOT Empire">
     <div class="loadtrack"><i></i></div>
@@ -123,7 +286,225 @@
   </main>
 
   <div id="overlay" class="hidden"><div id="card"></div></div>
-  <script src="math-config.js"></script>
-<script src="game.js"></script>
+<script>
+/*
+ * LOT EMPIRE - PROFILO MATEMATICO DEMO "VINCITE FREQUENTI"
+ * Crediti esclusivamente virtuali.
+ *
+ * Questo file centralizza i parametri che influenzano la frequenza delle vincite.
+ * Il profilo è pensato per una demo più divertente e generosa, non per gioco con denaro reale.
+ */
+window.LOT_MATH_CONFIG = Object.freeze({
+  profileName: 'VINCITE FREQUENTI',
+
+  // Probabilità applicata quando uno spin naturale non contiene vincite.
+  // 0.52 significa che il 52% degli spin naturalmente perdenti viene trasformato
+  // in una piccola vincita su una linea casuale.
+  lossToSmallWinChance: 0.52,
+
+  // Simboli usati per le vincite aggiuntive. Sono volutamente simboli bassi/medi,
+  // così la frequenza aumenta senza generare continuamente premi enormi.
+  frequentWinSymbols: ['TEN', 'J', 'Q', 'K', 'A', 'HELMET', 'LAUREL'],
+
+  // Numero di simboli uguali inseriti sulla linea: 3 quasi sempre, 4 raramente.
+  fourOfAKindChance: 0.10,
+
+  // Aumenta leggermente la presenza di Wild, Scatter e Bonus rispetto al profilo base.
+  specialWeightMultiplier: {
+    WILD: 1.20,
+    SCATTER: 1.25,
+    BONUS: 1.20
+  },
+
+  // Il Potere dell'Impero cresce più velocemente nelle vincite piccole.
+  minimumPowerGainOnWin: 2,
+
+  // Limite di sicurezza per la vincita aggiuntiva costruita dal profilo frequente.
+  // È espresso come multiplo della puntata totale.
+  maxAssistedWinMultiplier: 5
+});
+
+</script>
+<script>
+window.addEventListener("error",function(e){console.error("LOT EMPIRE runtime error",e.error||e.message);});
+(()=>{
+'use strict';
+const MATH=window.LOT_MATH_CONFIG||{};
+const PAYLINES=[[1,1,1,1,1],[0,0,0,0,0],[2,2,2,2,2],[0,1,2,1,0],[2,1,0,1,2],[0,0,1,2,2],[2,2,1,0,0],[1,0,0,0,1],[1,2,2,2,1],[0,1,1,1,0],[2,1,1,1,2],[0,1,0,1,0],[2,1,2,1,2],[1,0,1,0,1],[1,2,1,2,1],[0,2,0,2,0],[2,0,2,0,2],[0,2,2,2,0],[2,0,0,0,2],[1,1,0,1,1],[1,1,2,1,1],[0,0,2,0,0],[2,2,0,2,2],[0,2,1,0,2],[2,0,1,2,0]];
+const S={A:{img:'A.png',w:9,p:[0,0,2,6,15]},K:{img:'K.png',w:9,p:[0,0,2,5,12]},Q:{img:'Q.png',w:10,p:[0,0,1.5,4,10]},J:{img:'J.png',w:10,p:[0,0,1.5,4,8]},TEN:{img:'10.png',w:11,p:[0,0,1,3,7]},HELMET:{img:'helmet.png',w:6,p:[0,0,4,12,30]},LAUREL:{img:'laurel.png',w:6,p:[0,0,4,14,35]},LYRE:{img:'lyre.png',w:5,p:[0,0,5,18,45]},COIN:{img:'coin.png',w:5,p:[0,0,6,20,55]},MAP:{img:'map.png',w:5,p:[0,0,7,22,60]},CUP:{img:'cup.png',w:4,p:[0,0,8,30,80]},COLOSSEUM:{img:'colosseum.png',w:4,p:[0,0,10,40,100]},TEMPLE:{img:'temple.png',w:3,p:[0,0,12,50,125]},EAGLE:{img:'eagle.png',w:3,p:[0,0,15,65,160]},EMPEROR:{img:'emperor.png',w:2,p:[0,0,20,90,250]},WILD:{img:'../wild-gold.png',w:2,p:[0,0,25,100,300],special:1},SCATTER:{img:'../scatter.png',w:3,p:[0,0,2,10,50],special:1},BONUS:{img:'../bonus.png',w:2,p:[0,0,0,0,0],special:1}};
+const debug={
+  winChance:Number(MATH.lossToSmallWinChance??.52),
+  bonusChance:.08,
+  fourChance:Number(MATH.fourOfAKindChance??.10),
+  maxAssist:Number(MATH.maxAssistedWinMultiplier??5),
+  naturalHitEstimate:.22,
+  naturalBonusEstimate:.015,
+  lastCalculation:'Nessuna giocata calcolata.'
+};
+const state={credit:0,bets:[.25,.5,.75,1,1.5,2,3,5],bi:3,spinning:false,auto:false,free:0,spins:0,wager:0,paid:0,power:0,sound:true,lastWin:0,bonusIndex:0};
+const $=id=>document.getElementById(id),reels=$('reels'),overlay=$('overlay'),card=$('card'),svg=$('paylines');
+const money=v=>Number(v||0).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function buildWeighted(){const a=[];for(const[k,v]of Object.entries(S)){const mult=(MATH.specialWeightMultiplier&&MATH.specialWeightMultiplier[k])||1;for(let i=0;i<Math.max(1,Math.round(v.w*mult));i++)a.push(k)}return a}
+const weighted=buildWeighted(),rand=()=>weighted[Math.floor(Math.random()*weighted.length)],grid=()=>Array.from({length:5},()=>Array.from({length:3},rand));
+function cell(k,c,r){const d=document.createElement('div');d.className='symbol'+(S[k].special?' special':'');d.dataset.k=k;d.dataset.c=c;d.dataset.r=r;d.innerHTML=`<img src="assets/symbols/${S[k].img}" alt="${k}">`;return d}
+function render(g,spin=false){reels.innerHTML='';g.forEach((col,c)=>{const rr=document.createElement('div');rr.className='reel';col.forEach((k,row)=>{const d=cell(k,c,row);if(spin)d.classList.add('spinning');rr.appendChild(d)});reels.appendChild(rr)})}
+function animateWildCell(el){if(!el||el.dataset.k!=='WILD')return;const sprite=document.createElement('div');sprite.className='wild-sprite';el.appendChild(sprite);const frames=[];for(let y=0;y<3;y++)for(let x=0;x<4;x++)frames.push([x,y]);let i=0;const timer=setInterval(()=>{const [x,y]=frames[i%frames.length];sprite.style.backgroundPosition=`${x*33.333}% ${y*50}%`;i++;if(i>=frames.length){clearInterval(timer);setTimeout(()=>sprite.remove(),120)}},75)}
+function animateVisibleWilds(){document.querySelectorAll('.symbol[data-k="WILD"]').forEach((el,n)=>setTimeout(()=>animateWildCell(el),n*90))}
+function evalGrid(g,bet){let total=0,wins=[];for(const rows of PAYLINES){const seq=rows.map((r,c)=>g[c][r]);let base=seq.find(x=>x!=='WILD');if(!base||base==='SCATTER'||base==='BONUS')continue;let count=0;for(const x of seq){if(x===base||x==='WILD')count++;else break}if(count>=3){const a=(S[base].p[count-1]||0)*(bet/25);if(a){total+=a;wins.push({rows,count,a})}}}const flat=g.flat(),sc=flat.filter(x=>x==='SCATTER').length,bo=flat.filter(x=>x==='BONUS').length;if(sc>=3)total+=bet*({3:2,4:10,5:50}[Math.min(sc,5)]||2);return{total,wins,sc,bo}}
+function buildFrequentWinGrid(g){const line=PAYLINES[Math.floor(Math.random()*PAYLINES.length)],pool=(MATH.frequentWinSymbols||['TEN','J','Q','K','A']).filter(k=>S[k]),symbol=pool[Math.floor(Math.random()*pool.length)]||'TEN',count=Math.random()<debug.fourChance?4:3;for(let c=0;c<count;c++)g[c][line[c]]=symbol;return g}
+function injectBonus(g){const cells=[];for(let c=0;c<5;c++)for(let r=0;r<3;r++)cells.push([c,r]);cells.sort(()=>Math.random()-.5);for(let i=0;i<3;i++){const[c,r]=cells[i];g[c][r]='BONUS'}return g}
+function prepareGrid(g,bet){const natural=evalGrid(g,bet);const winRoll=Math.random(),bonusRoll=Math.random();let assisted=false,bonusInjected=false;
+  if(natural.bo<3&&bonusRoll<debug.bonusChance){g=injectBonus(g.map(c=>c.slice()));bonusInjected=true}
+  let result=evalGrid(g,bet);
+  if(result.total<=0&&result.sc<3&&result.bo<3&&winRoll<debug.winChance){g=buildFrequentWinGrid(g.map(c=>c.slice()));result=evalGrid(g,bet);assisted=true;const cap=bet*debug.maxAssist;if(result.total>cap&&result.wins.length){const scale=cap/result.total;result.wins.forEach(w=>w.a*=scale);result.total=cap}}
+  debug.lastCalculation=[`RNG vincita: ${winRoll.toFixed(4)} < soglia ${debug.winChance.toFixed(2)} = ${assisted?'SÌ':'NO'}`,`RNG bonus: ${bonusRoll.toFixed(4)} < soglia ${debug.bonusChance.toFixed(2)} = ${bonusInjected?'SÌ':'NO'}`,`Esito naturale: ${natural.total.toFixed(2)} crediti · Bonus naturali: ${natural.bo}`,`Esito finale base: ${result.total.toFixed(2)} crediti · Bonus: ${result.bo}`].join('\n');
+  return{g,result,assisted,bonusInjected}
+}
+function projected(){const pHit=debug.naturalHitEstimate+(1-debug.naturalHitEstimate)*debug.winChance;const pBonus=1-(1-debug.naturalBonusEstimate)*(1-debug.bonusChance);return{hit:pHit,bonus:pBonus,wins1000:Math.round(pHit*1000),bonus1000:Math.round(pBonus*1000)}}
+function hud(){
+  $('credit').textContent=money(state.credit);$('bet').textContent=money(state.bets[state.bi]);$('freeText').textContent=`GIRI GRATIS ${state.free}`;$('powerFill').style.height=`${state.power/20*100}%`;$('powerText').textContent=`${state.power} / 20`;
+  const r=state.wager?state.paid/state.wager*100:0,rtp=`${r.toFixed(2).replace('.',',')}%`;$('stats').textContent=`Giocate: ${state.spins} · RTP sessione: ${rtp} · Debug: ${(debug.winChance*100).toFixed(0)}% / Bonus ${(debug.bonusChance*100).toFixed(0)}%`;
+  if($('mobileStats'))$('mobileStats').textContent=`${state.spins} giocate`;if($('mobileRtp'))$('mobileRtp').textContent=rtp;if($('mobileFree'))$('mobileFree').textContent=state.free;
+}
+function clear(){svg.innerHTML='';document.querySelectorAll('.win').forEach(e=>e.classList.remove('win'))}
+function lines(ws){ws.forEach(w=>{const pts=[];for(let c=0;c<w.count;c++){const row=w.rows[c],el=reels.children[c].children[row];el.classList.add('win');pts.push(`${(c+.5)*200},${(row+.5)*200}`)}const p=document.createElementNS('http://www.w3.org/2000/svg','polyline');p.setAttribute('points',pts.join(' '));svg.appendChild(p)})}
+async function modal(html,cls='',bg=''){card.className=cls;card.style.backgroundImage=bg?`linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.72)),url('${bg}')`:'';card.innerHTML=html;overlay.classList.remove('hidden');return new Promise(res=>{const close=()=>{overlay.classList.add('hidden');card.className='';card.style.backgroundImage='';res()};card.querySelectorAll('.close,.ok').forEach(b=>b.addEventListener('click',close))})}
+async function bonusIntro(){card.className='visual';card.style.backgroundImage="url('assets/background-bonus.png')";card.innerHTML='<div class="bonusLogo">LOT EMPIRE</div><div class="litterioBonus">LITTERIO LO PRENDE E LO SPACCA! ⚡</div>';overlay.classList.remove('hidden');await wait(2400);overlay.classList.add('hidden');card.className='';card.style.backgroundImage=''}
+function finishBonus(res,value){overlay.classList.add('hidden');card.className='';card.style.backgroundImage='';res(value)}
+async function treasureBonus(bet){return new Promise(res=>{const vals=[2,3,5,8,10,12,15,20,30].sort(()=>Math.random()-.5);card.className='bonus-panel';card.innerHTML=`<h1>TESORI DELL'IMPERO</h1><p>Scegli un forziere.</p><div class="chests">${vals.map(v=>`<button class="chest" data-v="${v}">🎁</button>`).join('')}</div>`;overlay.classList.remove('hidden');card.querySelectorAll('.chest').forEach(b=>b.onclick=()=>{const v=Number(b.dataset.v)*bet;b.textContent=money(v);card.querySelectorAll('button').forEach(x=>x.disabled=true);setTimeout(()=>finishBonus(res,v),1200)})})}
+async function wheelBonus(bet){return new Promise(res=>{const vals=[2,3,5,8,10,12,20,50],idx=Math.floor(Math.random()*vals.length),v=vals[idx]*bet;card.className='bonus-panel';card.innerHTML='<h1>RUOTA DELLA FORTUNA</h1><div id="bonusWheel" class="wheel">GIRA</div><div class="modal-actions"><button id="wheelGo">GIRA LA RUOTA</button></div>';overlay.classList.remove('hidden');$('wheelGo').onclick=()=>{$('wheelGo').disabled=true;$('bonusWheel').style.transform=`rotate(${1440+idx*45}deg)`;setTimeout(()=>{$('bonusWheel').textContent=`×${vals[idx]}`;setTimeout(()=>finishBonus(res,v),900)},2300)}})}
+async function shieldBonus(bet){return new Promise(res=>{const vals=[3,4,5,7,8,10,12,25,40].sort(()=>Math.random()-.5);card.className='bonus-panel';card.innerHTML=`<h1>SCELTA IMPERIALE</h1><p>Scegli uno scudo e rivela il premio.</p><div class="shield-grid">${vals.map(v=>`<button class="shield" data-v="${v}">🛡️</button>`).join('')}</div>`;overlay.classList.remove('hidden');card.querySelectorAll('.shield').forEach(b=>b.onclick=()=>{const v=Number(b.dataset.v)*bet;b.textContent=`×${b.dataset.v}`;card.querySelectorAll('button').forEach(x=>x.disabled=true);setTimeout(()=>finishBonus(res,v),1200)})})}
+async function litterioRevealBonus(bet){return new Promise(res=>{
+  const deck=['L','L','L','L',2,3,4,5,6,8,10,15].sort(()=>Math.random()-.5);let found=0,bank=0,opened=0,done=false;
+  card.className='bonus-panel';card.innerHTML=`<h1>LITTERIO EMPIRE</h1><p>Premi le caselle: trova 3 Litterio per conquistare il premio imperiale.</p><div id="litterioCounter" class="litterio-counter">Litterio trovati: 0 / 3 · Premio: 0,00</div><div class="litterio-grid">${deck.map((v,i)=>`<button class="litterio-box" data-i="${i}" data-v="${v}">?</button>`).join('')}</div>`;overlay.classList.remove('hidden');
+  const finish=()=>{if(done)return;done=true;const prize=Math.max(bet*5,bank*bet);card.querySelectorAll('.litterio-box').forEach(x=>x.disabled=true);setTimeout(()=>finishBonus(res,prize),1400)};
+  card.querySelectorAll('.litterio-box').forEach(b=>b.addEventListener('click',()=>{if(done||b.disabled)return;b.disabled=true;b.classList.add('revealed');opened++;const v=b.dataset.v;if(v==='L'){found++;b.innerHTML='<img src="assets/bonus.png" alt="Litterio Empire">';animateWildCell(b)}else{bank+=Number(v);b.innerHTML=`<span class="reveal-value">×${v}</span>`}const prize=Math.max(bet*5,bank*bet);card.querySelector('#litterioCounter').textContent=`Litterio trovati: ${found} / 3 · Premio: ${money(prize)}`;if(found>=3||opened>=deck.length-2)finish()}));
+})}
+async function bonusGame(bet){await bonusIntro();const games=[treasureBonus,wheelBonus,shieldBonus,litterioRevealBonus],fn=games[state.bonusIndex%games.length];state.bonusIndex++;return fn(bet)}
+async function big(title,amount){await modal(`<div class="popup-panel"><h1>${title}</h1><div class="bigAmount">${money(amount)}</div><button class="ok">CONTINUA</button></div>`,'visual','assets/win-popups.png')}
+const voucherMemory={};
+function getVouchers(){
+  try{
+    const raw=localStorage.getItem('lotEmpireVouchersV6');
+    return raw?JSON.parse(raw):voucherMemory;
+  }catch{return voucherMemory}
+}
+function setVouchers(v){
+  Object.keys(voucherMemory).forEach(k=>delete voucherMemory[k]);
+  Object.assign(voucherMemory,v);
+  try{localStorage.setItem('lotEmpireVouchersV6',JSON.stringify(v))}catch{}
+}
+const CODE_ALPHABET='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function checksumFor(amountPart,nonce){
+  let n=17;
+  for(const ch of amountPart+nonce)n=(n*31+CODE_ALPHABET.indexOf(ch)+1)%36;
+  return CODE_ALPHABET[n];
+}
+function encodeVoucher(amount){
+  const cents=Math.round(amount*100);
+  const amountPart=cents.toString(36).toUpperCase();
+  let code,nonce;
+  const vouchers=getVouchers();
+  do{
+    nonce=CODE_ALPHABET[Math.floor(Math.random()*36)];
+    code=amountPart+nonce+checksumFor(amountPart,nonce);
+  }while(vouchers[code]);
+  return {code,amountPart,nonce,checksum:code.slice(-1),cents};
+}
+function decodeVoucherAmount(code){
+  const clean=String(code||'').trim().toUpperCase().replace(/[^0-9A-Z]/g,'');
+  if(clean.length<3)return null;
+  const amountPart=clean.slice(0,-2),nonce=clean.slice(-2,-1),check=clean.slice(-1);
+  if(checksumFor(amountPart,nonce)!==check)return null;
+  const cents=parseInt(amountPart,36);
+  if(!Number.isSafeInteger(cents)||cents<=0)return null;
+  return {clean,cents,amount:cents/100,amountPart,nonce,check};
+}
+function closeOverlay(){overlay.classList.add('hidden');card.innerHTML=''}
+function openCashout(){
+  if(state.spinning)return;
+  const max=Math.max(0,state.credit);
+  const suggested=Math.min(state.lastWin>0?state.lastWin:max,max);
+  card.className='wallet-panel';
+  card.innerHTML=`<button class="close" type="button">×</button><h1>RISCUOTI CREDITI DEMO</h1><p>Il valore viene convertito direttamente in base 36: per questo il codice usa meno caratteri rispetto alla cifra decimale. Gli ultimi due caratteri identificano e verificano il voucher.</p><label for="cashAmount">Importo massimo: <b>${money(max)}</b></label><input id="cashAmount" inputmode="decimal" type="number" min="0.01" max="${max}" step="0.01" value="${suggested.toFixed(2)}"><div id="cashPreview" class="amount-preview"></div><div class="modal-actions"><button type="button" id="createVoucher">GENERA CODICE</button><button type="button" class="cancel">ANNULLA</button></div><div id="voucherResult" aria-live="polite"></div>`;
+  overlay.classList.remove('hidden');
+  const amountInput=card.querySelector('#cashAmount');
+  const preview=card.querySelector('#cashPreview');
+  const refreshPreview=()=>{
+    const amount=Math.round(Number(amountInput.value)*100)/100;
+    if(!Number.isFinite(amount)||amount<=0){preview.textContent='Inserisci un importo valido.';return}
+    const cents=Math.round(amount*100),part=cents.toString(36).toUpperCase();
+    preview.innerHTML=`${money(amount)} = ${cents} centesimi = <b>${part}</b> in base 36<br><small>Codice finale previsto: ${part} + 2 caratteri di controllo</small>`;
+  };
+  amountInput.addEventListener('input',refreshPreview);refreshPreview();
+  card.querySelector('.close').addEventListener('click',closeOverlay);
+  card.querySelector('.cancel').addEventListener('click',closeOverlay);
+  card.querySelector('#createVoucher').addEventListener('click',()=>{
+    const amount=Math.round(Number(amountInput.value)*100)/100;
+    const result=card.querySelector('#voucherResult');
+    if(!Number.isFinite(amount)||amount<=0||amount>state.credit){result.textContent='Importo non valido o superiore al credito disponibile.';return}
+    const encoded=encodeVoucher(amount),v=getVouchers();
+    v[encoded.code]={amount,cents:encoded.cents,used:false,created:Date.now()};
+    setVouchers(v);state.credit-=amount;state.lastWin=0;hud();
+    result.innerHTML=`<div class="compact-code">${encoded.code}</div><p>Valore voucher: <b>${money(amount)} crediti demo</b></p><div class="code-breakdown">IMPORTO: ${encoded.amountPart} (base 36)<br>CONTROLLO: ${encoded.nonce}${encoded.checksum}<br>CODICE: ${encoded.code}</div>`;
+    $('walletStatus').textContent=`Ultimo voucher: ${encoded.code} · ${money(amount)}`;
+    card.querySelector('#createVoucher').disabled=true;amountInput.disabled=true;
+  });
+}
+function openRecharge(){
+  if(state.spinning)return;
+  card.className='wallet-panel';
+  card.innerHTML='<button class="close" type="button">×</button><h1>RICARICA BORSELLINO</h1><p>Inserisci il codice alfanumerico compatto. Il gioco decodifica la parte in base 36, verifica la firma e controlla che il voucher non sia già stato usato.</p><input id="voucherInput" inputmode="text" maxlength="12" autocomplete="off" autocapitalize="characters" placeholder="ES. 255SAB"><div id="decodePreview" class="amount-preview">In attesa del codice…</div><div class="modal-actions"><button type="button" id="redeemVoucher">AGGIUNGI CREDITI</button><button type="button" class="cancel">ANNULLA</button></div><div id="redeemResult" aria-live="polite"></div>';
+  overlay.classList.remove('hidden');
+  const input=card.querySelector('#voucherInput'),preview=card.querySelector('#decodePreview'),result=card.querySelector('#redeemResult');
+  const showDecode=()=>{
+    input.value=input.value.toUpperCase().replace(/[^0-9A-Z]/g,'');
+    const decoded=decodeVoucherAmount(input.value);
+    preview.innerHTML=decoded?`Valore decodificato: <b>${money(decoded.amount)}</b><br><small>${decoded.amountPart} base 36 = ${decoded.cents} centesimi · firma valida</small>`:'Codice incompleto o firma non valida.';
+  };
+  input.addEventListener('input',showDecode);
+  card.querySelector('.close').addEventListener('click',closeOverlay);
+  card.querySelector('.cancel').addEventListener('click',closeOverlay);
+  card.querySelector('#redeemVoucher').addEventListener('click',()=>{
+    const code=input.value.trim().toUpperCase(),decoded=decodeVoucherAmount(code),v=getVouchers(),item=v[code];
+    if(!decoded){result.textContent='Codice non valido: controllo alfanumerico fallito.';return}
+    if(!item){result.textContent='Codice formalmente valido, ma non emesso da questo browser.';return}
+    if(item.used){result.textContent='Codice già utilizzato.';return}
+    if(Math.round(Number(item.amount)*100)!==decoded.cents){result.textContent='Il valore del codice non coincide con il voucher salvato.';return}
+    item.used=true;v[code]=item;setVouchers(v);state.credit+=decoded.amount;hud();
+    result.innerHTML=`<p>Ricarica completata: <b>${money(decoded.amount)} crediti demo</b></p>`;
+    $('walletStatus').textContent=`Voucher ${code} utilizzato`;
+    card.querySelector('#redeemVoucher').disabled=true;input.disabled=true;
+  });
+}
+function openDebug(){
+  card.className='debug-panel';
+  card.innerHTML=`<button class="close" type="button">×</button><h1>Debugging mode</h1><div class="debug-grid"><div class="debug-control"><label for="dbgWin">Percentuale vincite assistite <b id="dbgWinVal">${Math.round(debug.winChance*100)}%</b></label><input id="dbgWin" type="range" min="0" max="100" value="${Math.round(debug.winChance*100)}"></div><div class="debug-control"><label for="dbgBonus">Frequenza combinazioni Bonus <b id="dbgBonusVal">${Math.round(debug.bonusChance*100)}%</b></label><input id="dbgBonus" type="range" min="0" max="50" value="${Math.round(debug.bonusChance*100)}"></div><div class="debug-control"><label for="dbgFour">Probabilità 4 simboli <b id="dbgFourVal">${Math.round(debug.fourChance*100)}%</b></label><input id="dbgFour" type="range" min="0" max="100" value="${Math.round(debug.fourChance*100)}"></div><div class="debug-control"><label for="dbgCap">Limite vincita assistita <b id="dbgCapVal">×${debug.maxAssist}</b></label><input id="dbgCap" type="range" min="1" max="20" value="${debug.maxAssist}"></div></div><div id="debugMath" class="debug-math"></div><div id="debugLive" class="debug-live">${debug.lastCalculation}</div><div class="modal-actions"><button type="button" class="ok">APPLICA E CHIUDI</button></div>`;
+  overlay.classList.remove('hidden');
+  const q=id=>card.querySelector('#'+id);
+  const refresh=()=>{
+    debug.winChance=Number(q('dbgWin').value)/100;debug.bonusChance=Number(q('dbgBonus').value)/100;debug.fourChance=Number(q('dbgFour').value)/100;debug.maxAssist=Number(q('dbgCap').value);
+    q('dbgWinVal').textContent=`${q('dbgWin').value}%`;q('dbgBonusVal').textContent=`${q('dbgBonus').value}%`;q('dbgFourVal').textContent=`${q('dbgFour').value}%`;q('dbgCapVal').textContent=`×${q('dbgCap').value}`;
+    const pr=projected();q('debugMath').innerHTML=`<b>Proiezione su 1.000 giocate</b><br><code>P(vincita)=0,22+(1−0,22)×${debug.winChance.toFixed(2)}=${pr.hit.toFixed(3)}</code><br>Vincite stimate: <b>${pr.wins1000}</b><br><code>P(bonus)=1−(1−0,015)×(1−${debug.bonusChance.toFixed(2)})=${pr.bonus.toFixed(3)}</code><br>Bonus stimati: <b>${pr.bonus1000}</b><br><small>Proiezione tecnica indicativa; ogni spin usa comunque il generatore casuale.</small>`;
+  };
+  ['dbgWin','dbgBonus','dbgFour','dbgCap'].forEach(id=>q(id).addEventListener('input',refresh));refresh();
+  card.querySelector('.close').addEventListener('click',closeOverlay);card.querySelector('.ok').addEventListener('click',()=>{closeOverlay();hud()});
+}
+async function spin(){if(state.spinning)return;const bet=state.bets[state.bi];if(state.free===0&&state.credit<bet){await modal('<h2>Credito insufficiente</h2><p>Usa RICARICA con un voucher demo oppure riavvia e aggiungi credito demo.</p><button class="ok">CHIUDI</button>');return}state.spinning=true;$('spinBtn').disabled=true;clear();$('win').textContent='0,00';if(state.free>0)state.free--;else{state.credit-=bet;state.wager+=bet}state.spins++;hud();$('message').textContent='I rulli ruotano...';render(grid(),true);let prepared=prepareGrid(grid(),bet),g=prepared.g;for(let c=0;c<5;c++){await wait(300+c*90);const rr=reels.children[c];for(let row=0;row<3;row++)rr.replaceChild(cell(g[c][row],c,row),rr.children[row]);rr.animate([{transform:'translateY(-18px)'},{transform:'translateY(8px)'},{transform:'translateY(0)'}],{duration:300,easing:'ease-out'});[...rr.children].forEach(animateWildCell)}await wait(180);const result=prepared.result;let total=result.total;if(result.sc>=3){const n={3:8,4:12,5:15}[Math.min(result.sc,5)]||8;state.free+=n;await modal(`<div class="popup-panel"><h1>GIRI GRATIS!</h1><div class="bigAmount">${n}</div><button class="ok">INIZIA</button></div>`,'visual','assets/bonus-popup.png')}if(result.bo>=3)total+=await bonusGame(bet);state.lastWin=total;if(total>0){state.credit+=total;state.paid+=total;state.power=Math.min(20,state.power+Math.max(Number(MATH.minimumPowerGainOnWin||1),Math.round(total/bet)));lines(result.wins);$('win').textContent=money(total);$('message').textContent=`${prepared.assisted?'VINCITA IMPERIALE':'VINCITA'} ${money(total)}`;if(total>=bet*20)await big(total>=bet*100?'IMPERIAL WIN':total>=bet*50?'MEGA WIN':'BIG WIN',total)}else $('message').textContent='L’Impero attende il prossimo colpo!';if(state.power>=20){const p=bet*10;state.credit+=p;state.paid+=p;state.lastWin+=p;state.power=0;await modal(`<div class="popup-panel"><h1>POTERE DELL'IMPERO!</h1><div class="bigAmount">${money(p)}</div><button class="ok">CONTINUA</button></div>`,'visual','assets/power-bar.png')}hud();state.spinning=false;$('spinBtn').disabled=false;if(state.auto)setTimeout(spin,650)}
+$('spinBtn').onclick=spin;$('debugTopBtn').onclick=openDebug;$('cashoutTopBtn').onclick=openCashout;$('rechargeTopBtn').onclick=openRecharge;$('betDown').onclick=()=>{if(!state.spinning){state.bi=Math.max(0,state.bi-1);hud()}};$('betUp').onclick=()=>{if(!state.spinning){state.bi=Math.min(state.bets.length-1,state.bi+1);hud()}};$('maxBtn').onclick=()=>{state.bi=state.bets.length-1;hud()};$('autoBtn').onclick=()=>{state.auto=!state.auto;$('autoBtn').textContent=state.auto?'STOP':'AUTO';if(state.auto&&!state.spinning)spin()};$('soundBtn').onclick=()=>{state.sound=!state.sound;$('soundBtn').textContent=`AUDIO ${state.sound?'ON':'OFF'}`};$('debugBtn').onclick=openDebug;$('cashoutBtn').onclick=openCashout;$('rechargeBtn').onclick=openRecharge;
+$('rulesBtn').onclick=()=>modal('<button class="close">×</button><h1>REGOLE</h1><img src="assets/paytable.png" style="width:100%"><p>5 rulli, 3 righe, 25 linee. Wild sostituisce i simboli normali. 3 Scatter assegnano giri gratis. 3 Bonus aprono uno dei quattro minigiochi a rotazione, incluso Litterio Empire.</p><button class="ok">CHIUDI</button>');
+$('galleryBtn').onclick=()=>modal(`<button class="close">×</button><h1>ASSET LOT EMPIRE</h1><div class="gallery">${['number-font.png','jackpots.png','prize-coins.png','multipliers.png','loading-bars.png','power-bar.png','wild-animation.png','reel-spin.png','reel-stop.png','bonus-sequence.png'].map(x=>`<img src="assets/${x}">`).join('')}</div><button class="ok">CHIUDI</button>`);
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&!overlay.classList.contains('hidden'))return;if(e.code==='Space'&&!$('app').classList.contains('locked')){e.preventDefault();spin()}});
+function unlockGame(){if(state.credit<=0)return;$('creditGate').classList.add('hidden');$('app').classList.remove('locked');document.body.classList.remove('startup-locked');hud();window.scrollTo(0,0);setTimeout(animateVisibleWilds,250)}
+$('addDemoCredit').addEventListener('click',()=>{state.credit=999;$('gateCredit').textContent=money(state.credit);$('gateStatus').textContent='Credito demo caricato. Avvio LOT EMPIRE…';hud();setTimeout(unlockGame,450)});
+$('gateRecharge').addEventListener('click',()=>{openRecharge();const observer=new MutationObserver(()=>{if(state.credit>0){$('gateCredit').textContent=money(state.credit);$('gateStatus').textContent='Codice accettato. Avvio LOT EMPIRE…';observer.disconnect();setTimeout(unlockGame,450)}});observer.observe($('credit'),{childList:true,subtree:true,characterData:true})});
+render(grid());hud();
+function runLoading(){const bar=document.querySelector('.loadtrack i'),txt=$('loadingText');let value=0;const timer=setInterval(()=>{value=Math.min(100,value+Math.floor(Math.random()*9)+3);bar.style.width=value+'%';txt.textContent=`CARICAMENTO SISTEMA ${value}%`;if(value>=100){clearInterval(timer);setTimeout(()=>{$('loading').style.display='none';$('creditGate').classList.remove('hidden')},350)}},90)}
+runLoading();setTimeout(()=>{const l=$('loading');if(l&&l.style.display!=='none'){l.style.display='none';$('creditGate').classList.remove('hidden')}},3500);
+window.__LOT_EMPIRE_READY__=true;
+})();
+
+</script>
 </body>
 </html>

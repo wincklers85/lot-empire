@@ -50,7 +50,7 @@ function sendFile(res, filePath) {
     }
 
     const ext = path.extname(filePath).toLowerCase();
-    const cacheControl = ext === '.html' ? 'no-cache' : 'public, max-age=604800, immutable';
+    const cacheControl = ['.html','.css','.js'].includes(ext) ? 'no-store, max-age=0' : 'public, max-age=86400';
     res.writeHead(200, {
       'Content-Type': MIME[ext] || 'application/octet-stream',
       'Cache-Control': cacheControl,
